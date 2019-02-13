@@ -20,11 +20,7 @@ all:    $(MAIN)
 		$(MESSAGE)
 
 $(MESSAGE):
-		ifeq($(OS),Windows_NT) 
-			ECHO Compiler named genius has been compiled, you are welcome.
-		else  
-			@echo  Compiler named genius has been compiled, You are welcome
-		endif	
+		  @echo  Done!\n	
 
 $(MAIN): $(OBJS) 
 		$(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS) $(LFLAGS) $(LIBS)

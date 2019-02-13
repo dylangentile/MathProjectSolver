@@ -1,0 +1,53 @@
+//problems being solved DONT WRITE NUMBERS
+
+1. Tom draws two cards.
+	a) What is the probability that his first card is hearts?
+	b) What is the probability that his second card is hearts?
+
+2. Tom draws two cards.
+	a) If his first card is hearts, what is the probability that his second card will be hearts?
+	b) If his second card is hearts, what is the probability that his first card was hearts?
+
+3. Tom flips four coins.
+	a) What is the probability that they all land on heads?
+	b) What is the probability that they all land the same?
+
+4. Out of three cards, one is blue on both sides, one is green on both sides, and one is blue on one side and
+green on the other. Tom sees one side of one card.
+	a) What is the probability that he sees a blue side?
+	b) If he sees a blue side, what is the probability that the other side is also blue?
+
+5. Forty percent of the students at Tom University are male. Twenty-five percent of the females and thirty-five
+percent of the males are science majors.
+	a) What is the probability that a random male is a science major?
+	b) What is the probability that a random science major is male?
+
+6. Tom flips a nickel, a dime, and a quarter.
+	a) If the quarter landed on heads, what is the probability that all three coins landed on heads?
+	b) If at least one of the coins landed on heads, what is the probability that all three of the coins landed on heads?
+
+7. Tom draws two cards.
+	a) If the first card is hearts, what is the probability that the first card is an ace?
+	b) If his first card is hearts, what is the probability that the second card is an ace?
+
+8. Two jacks and an ace are shuffled face down. Tom guesses which card is the ace. Then Tim flips over another
+card, and it is a jack.
+	a) What is the probability that the third card is the ace?
+	b) What is the probability that the third card is an ace, given Tim knew which cards were jacks and chose one of them to flip?
+
+9. Tom has two kids.
+	a) If he has at least one daughter, what is the probability that he has two daughters?
+	b) If at least one of his kids was born on a Sunday, what is the probability that both were born on a Sunday?
+
+10. Tom draws four cards.
+	a) What is the probability that the first card is an ace?
+	b) What is the probability that one of the four cards is the ace of spades?
+
+11. Tom and Tim are each rolling a six-sided die. The first person to roll a six wins.
+	a) If they roll at the same time and they reroll if there is a tie, what is the probability that Tom will win?
+	b) If they take turns rolling and Tim goes first, what is the probability that Tom will win?
+
+12. Tom has a bag with two marbles, each of which is equally likely to be black or white. He adds another marble,
+then pulls out two of the three marbles at random and they are both black.
+	a) What is the probability the remaining marble is black if the marble he added was equally likely to be black or white?
+	b) What is the probability that the remaining marble is black if the marble he added was black?
