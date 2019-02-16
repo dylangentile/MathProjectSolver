@@ -7,7 +7,8 @@ LFLAGS =
 LIBS = 
 #-lmylib -lm
 
-SRCS = main.cpp deck.cpp
+SRCS = main.cpp deck.cpp function.cpp
+
 
 
 OBJS = $(SRCS:.c=.o)

@@ -12,6 +12,7 @@ using namespace std;
 void problem1(bool logic){
 	Deck *thedeck = new Deck;
 	thedeck->deckInit(); 
+	thedeck->drawprob(2, 1, -1);
 	delete thedeck;
 }
 
@@ -96,7 +97,7 @@ int main(int argc, char const *argv[])
 		getline(cin, input);
 		int problemtodo = -1;
 		bool logic = true;
-		if(input == "q" || input == "quit")
+		if(input == "q" || input == "quit" || input == "exit")
 		{
 			break;
 		}
@@ -170,6 +171,7 @@ int main(int argc, char const *argv[])
 			cout << "\n\nDoing " << problemtodo << ":";
 			if(logic){
 				cout << "logically\n";
+				problem1(logic);
 			}
 			else
 			{
