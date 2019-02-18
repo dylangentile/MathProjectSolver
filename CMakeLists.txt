@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13)
-project(genius)
+project(probability)
 #set(EXECUTABLE_OUTPUT_PATH ~/etc/etc/usr/etc)
 
 #The includes

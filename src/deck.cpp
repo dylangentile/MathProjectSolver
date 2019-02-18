@@ -46,8 +46,10 @@ Deck::sequencedDraw(int &numerator, deque<int> &taken, int nesting, int whichsui
 			}
 		}
 		if(!skip){
-			taken.push_back(i);
+		
+            retMsg.push_back(cardArray[taken.back()].name);
 			retMsg.push_back(cardArray[i].name);
+            taken.push_back(i);
 			if(nesting > 0){			
 				sequencedDraw(numerator, taken, (nesting - 1), whichsuit, whichvalue);
 			}
@@ -83,8 +85,9 @@ Deck::sequencedDraw(int &numerator, deque<int> &taken, int nesting, int whichsui
 
 				}
 			}
-
-
+            
+            taken.pop_back();
+            retMsg+='\n';
 
 		}
 
@@ -92,7 +95,6 @@ Deck::sequencedDraw(int &numerator, deque<int> &taken, int nesting, int whichsui
 
 
 
-		taken.pop_back();
 
 	}
 
@@ -110,11 +112,16 @@ Deck::drawprob(int choose, int whichsuit, int whichvalue){ //a -1 value means it
 	for(int i = 0; i < 52; i++)
 	{
 		taken.push_back(i);
-		retMsg.push_back(cardArray[i].name);
+		
 		if(choose > 0)
 		{
 			sequencedDraw(numerator, taken, (choose - 1), whichsuit, whichvalue);
+            
 		}
+        else{
+            retMsg.push_back(cardArray[i].name);
+        }
+        
 		if(whichsuit == -1 && whichvalue == -1)
 		{
 			
@@ -126,7 +133,7 @@ Deck::drawprob(int choose, int whichsuit, int whichvalue){ //a -1 value means it
 			if(whichsuit == -1)
 			{
 				if(whichvalue == cardArray[i].value){
-					numerator++;
+                    numerator += (choose * (sample - choose - 1)) + 1;
                     retMsg += " <----";
 				}
 
@@ -134,7 +141,7 @@ Deck::drawprob(int choose, int whichsuit, int whichvalue){ //a -1 value means it
 			else if(whichvalue == -1)
 			{
 				if(whichsuit == cardArray[i].suit){
-					numerator++;
+                    numerator += (choose * (sample - choose - 1)) + 1;
                     retMsg += " <----";
 				}
 			}
@@ -142,7 +149,7 @@ Deck::drawprob(int choose, int whichsuit, int whichvalue){ //a -1 value means it
 		else
 		{
 			if(whichsuit == cardArray[i].suit && whichvalue == cardArray[i].value){
-				numerator++;
+                numerator += (choose * (sample - choose - 1)) + 1;
                 retMsg += " <----";
 
 			}
