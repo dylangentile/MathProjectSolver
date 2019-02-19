@@ -2,4 +2,4 @@
 
 
 
-int factorial(int x, int y);
+long long factorial(long long x, long long y);

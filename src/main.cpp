@@ -12,7 +12,12 @@ using namespace std;
 void problem1(bool logic){
 	Deck *thedeck = new Deck;
 	thedeck->deckInit(); 
-	thedeck->drawprob(2, 1, -1);
+	if(logic){
+	thedeck->dependentProb(2, 1, -1);
+	}
+	else{
+		thedeck->empericalEvidence(1, 1, -1, 10);
+	}
 	delete thedeck;
 }
 
@@ -177,6 +182,8 @@ int main(int argc, char const *argv[])
 			{
 				cout << "emperically\n";
 			}
+			problem1(logic);
+
 		}
 
 

@@ -1,6 +1,11 @@
 //PROBLEM 1
 #include "deck.h"
+#include <random>
+#include <algorithm>
 #include <iostream>
+#include <sstream>
+#include <iterator>
+
 #include "function.h"
 
 using namespace std;
@@ -17,151 +22,187 @@ Deck::~Deck(){
 void
 Deck::deckInit(){
 	sample = 52;
-	string representation = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	cardArray = new Card[52];
+	cardArray.clear();
 	int x = 0;
 	for(int i = 0; i < 4; i++)
   	{
-		for(int j = 0; j < 13; j++)
+		for(int j = 1; j < 14; j++)
 		{
-			cardArray[x].suit = i;
-			cardArray[x].value = j+1; //counting from one allows the cardvalues to match real life and not be all one less
-			cardArray[x].name = representation[x];
+			Card tempCard;
+			tempCard.suit = i;
+			tempCard.value = j; //counting from one allows the cardvalues to match real life and not be all one less
+			if(j == 1)
+			{
+					tempCard.name = "Ace of ";
+			}
+			else if(j >= 1 && j <= 10){
+				stringstream ss;
+				ss << j;
+				string g;
+				ss >> g;
+				tempCard.name = g + " of ";
+			}
+			else if(j == 11){
+				tempCard.name = "Jack of ";
+			}
+			else if(j == 12){
+				tempCard.name = "Queen of ";
+			}
+			else if(j == 13){
+				tempCard.name = "King of ";
+			}
+			else {
+				tempCard.name = "Unknown of ";
+			}
+
+
+			if(i == 0){
+				
+				tempCard.name += "Spades";
+			}
+			else if(i == 1){
+				tempCard.name += "Hearts";
+			}
+			else if(i == 2){
+				tempCard.name += "Clubs";
+			}
+			else if(i == 3){
+				tempCard.name += "Diamonds";
+			}
+			else {
+				tempCard.name += "Unknown";
+			}
+			cardArray.push_back(tempCard);
 			x++; 
 		}
 	}
   
 }
 
-void 
-Deck::sequencedDraw(int &numerator, deque<int> &taken, int nesting, int whichsuit, int whichvalue){
 
-	for(int i = 0; i < 52; i++){
-		deque<int>::iterator it;
-		bool skip = false;
-		for(it = taken.begin(); it != taken.end(); it++){
-			if(*it == i){
-				skip = true;
-				break;
-			}
-		}
-		if(!skip){
+void
+Deck::drawCombination(int &numerator, int choose){
+
+	for(int i = 0; i < cardArray.size(); i++)
+	{
+		Card theCard = cardArray.at(i);
 		
-            retMsg.push_back(cardArray[taken.back()].name);
-			retMsg.push_back(cardArray[i].name);
-            taken.push_back(i);
-			if(nesting > 0){			
-				sequencedDraw(numerator, taken, (nesting - 1), whichsuit, whichvalue);
-			}
-			if(whichsuit == -1 && whichvalue == -1)
-			{
-				
-				numerator = 100;
-				break;
-			}
-			else if(whichsuit == -1 || whichvalue == -1)
-			{
-				if(whichsuit == -1)
-				{
-					if(whichvalue == cardArray[i].value){
-						numerator++;
-	                    retMsg += " <----";
-					}
-
-				}
-				else if(whichvalue == -1)
-				{
-					if(whichsuit == cardArray[i].suit){
-						numerator++;
-	                    retMsg += " <----";
-					}
-				}
-			}
-			else
-			{
-				if(whichsuit == cardArray[i].suit && whichvalue == cardArray[i].value){
-					numerator++;
-	                retMsg += " <----";
-
-				}
-			}
-            
-            taken.pop_back();
-            retMsg+='\n';
-
-		}
-
-
-
-
-
-
 	}
 
 }
-void
-Deck::drawprob(int choose, int whichsuit, int whichvalue){ //a -1 value means it can be any suit/value
-	deque<int> taken;
-	int numerator = 0;
 
 
-	int denominator = factorial(sample, sample - choose);
 
+void 
+Deck::dependentProb(int choose, int whichSuit, int whichValue){
+/*
+	for(vector<Card>::iterator it = cardArray.begin(); it != cardArray.end(); it++){
+		Card theCard = *it;
+		cout << theCard.name << "\n";
+	}
+*/
 	choose--;
+	int numerator;
+	long long denominator = factorial(sample, sample - choose);
 
-	for(int i = 0; i < 52; i++)
-	{
-		taken.push_back(i);
-		
-		if(choose > 0)
-		{
-			sequencedDraw(numerator, taken, (choose - 1), whichsuit, whichvalue);
-            
+    
+
+    for(int i = 0; i < sample; i++)
+    {
+   		
+    	if(choose > 0){
+    		drawCombination(numerator, choose -1);
+    	}
+
+
+
+
+
+    }
+
+
+}
+
+void Deck::empericalEvidence(int choose, int whichSuit, int whichValue, int times){
+	int numerator = 0;
+	int denominator = 0;
+	for(int i = 0; i < times; i++){
+		vector<Card> drawn;
+		deckInit();
+		random_shuffle(cardArray.begin(), cardArray.end());
+		for(int q = 0; q < choose; q++){
+			drawn.push_back(cardArray.back());
+			cout <<	drawn.back().name;
+			drawn.pop_back();
 		}
-        else{
-            retMsg.push_back(cardArray[i].name);
-        }
-        
-		if(whichsuit == -1 && whichvalue == -1)
+
+		if(whichValue != -1 && whichSuit != -1)
 		{
-			
-			numerator = denominator;
-			break;
-		}
-		else if(whichsuit == -1 || whichvalue == -1)
-		{
-			if(whichsuit == -1)
+			for(vector<Card>::iterator it = drawn.begin(); it != drawn.end(); ++it)
 			{
-				if(whichvalue == cardArray[i].value){
-                    numerator += (choose * (sample - choose - 1)) + 1;
-                    retMsg += " <----";
+				Card tempCard = *it;
+				cout << tempCard.name;
+				if(tempCard.suit == whichSuit && tempCard.value == whichValue)
+				{
+					numerator++;
+					break;
 				}
-
+				
 			}
-			else if(whichvalue == -1)
+			denominator++;
+			//cout << "\n";
+
+		}	
+		else if(whichValue == -1){
+			if(drawn.size()== 0){
+				cout << "sizeof 0";
+			}
+			if(drawn.size() == 1){
+				cout << "choose 1";
+				//Card acard = drawn.at(0);
+				//if(acard.suit == whichSuit){
+					//numerator++;
+				//}
+			}
+			else
 			{
-				if(whichsuit == cardArray[i].suit){
-                    numerator += (choose * (sample - choose - 1)) + 1;
-                    retMsg += " <----";
+				for(vector<Card>::iterator it = drawn.begin(); it != drawn.end(); ++it)
+				{
+					Card tempCard = *it;
+					if(tempCard.suit == whichSuit)
+					{
+						numerator++;
+						break;
+					}
 				}
 			}
-		}
-		else
-		{
-			if(whichsuit == cardArray[i].suit && whichvalue == cardArray[i].value){
-                numerator += (choose * (sample - choose - 1)) + 1;
-                retMsg += " <----";
+			denominator++;
 
-			}
 		}
-		retMsg.push_back('\n');
-		taken.pop_back();
+		else if(whichSuit == -1){
+			for(vector<Card>::iterator it = drawn.begin(); it != drawn.end(); ++it)
+			{
+				Card tempCard = *it;
+				cout << tempCard.name;
+				if(tempCard.value == whichValue)
+				{
+					numerator++;
+					break;
+				}
+			}
+			denominator++;
+
+		}
+		else{
+			cout << "\n????\n";
+		}
+		cout << "\n";
 	}
 
-	double probabilty = (double)numerator/(double)denominator;
-	cout << retMsg << "\n\nThe chance of getting this is: \n" << probabilty * 100 << "%" << " or " << numerator << "/" << denominator << "\n";
-	string input;
-	cout << "\n\n(CONFIRM)$";
-	getline(cin, input);
+
+
+	double chance = (double)numerator/(double)denominator;
+	chance = chance * 100;
+	cout << "\n\nAfter trying " << times << " times, I think the chance is:\n" << chance << "%" << " or " << numerator << "/" << denominator << "\n";
 }
 

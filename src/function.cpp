@@ -1,9 +1,9 @@
 #include "function.h"
 
 
-int factorial(int x, int y){
-	int out = 1;
-	for(int i = x; i > y; i--){
+long long factorial(long long x, long long y){
+	long long out = 1;
+	for(long long i = x; i > y; i--){
         out *= i;
 	}
 	return out;
