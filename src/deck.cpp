@@ -5,6 +5,8 @@
 #include <iostream>
 #include <sstream>
 #include <iterator>
+#include "progress_bar.hpp"
+
 
 #include "function.h"
 
@@ -12,12 +14,15 @@ using namespace std;
 
 
 Deck::Deck(){
-	retMsg = "\nCombinations:\n";
+	retMsg = "";
 }
 Deck::~Deck(){
   
 }
-
+void
+Deck::preInit(bool verbosity){
+	verbose = verbosity;
+}
 
 void
 Deck::deckInit(){
@@ -124,6 +129,10 @@ Deck::dependentProb(int choose, int whichSuit, int whichValue){
 }
 
 void Deck::empericalEvidence(int choose, int whichSuit, int whichValue, int times){
+	//Progress *theProgress = new Progress;
+	//theProgress->pInit(times);
+	ProgressBar progress_bar(times, "Calculating");
+	retMsg += "\n";
 	int numerator = 0;
 	int denominator = 0;
 	for(int i = 0; i < times; i++){
@@ -132,8 +141,14 @@ void Deck::empericalEvidence(int choose, int whichSuit, int whichValue, int time
 		random_shuffle(cardArray.begin(), cardArray.end());
 		for(int q = 0; q < choose; q++){
 			drawn.push_back(cardArray.back());
-			cout <<	drawn.back().name;
-			drawn.pop_back();
+			retMsg += drawn.back().name;
+			if(drawn.back().name.size() >= 16){
+				retMsg += "\t";
+			}
+			else{
+				retMsg += "\t\t";
+			}
+			cardArray.pop_back();
 		}
 
 		if(whichValue != -1 && whichSuit != -1)
@@ -141,68 +156,77 @@ void Deck::empericalEvidence(int choose, int whichSuit, int whichValue, int time
 			for(vector<Card>::iterator it = drawn.begin(); it != drawn.end(); ++it)
 			{
 				Card tempCard = *it;
-				cout << tempCard.name;
+				//cout << tempCard.name;
 				if(tempCard.suit == whichSuit && tempCard.value == whichValue)
 				{
+					retMsg += " \e[1m<-----\e[0m";
 					numerator++;
 					break;
 				}
 				
 			}
 			denominator++;
+			progress_bar.Progressed(i);
+			//theProgress->update();
 			//cout << "\n";
 
 		}	
 		else if(whichValue == -1){
-			if(drawn.size()== 0){
-				cout << "sizeof 0";
-			}
-			if(drawn.size() == 1){
-				cout << "choose 1";
-				//Card acard = drawn.at(0);
-				//if(acard.suit == whichSuit){
-					//numerator++;
-				//}
-			}
-			else
+			for(vector<Card>::iterator it = drawn.begin(); it != drawn.end(); ++it)
 			{
-				for(vector<Card>::iterator it = drawn.begin(); it != drawn.end(); ++it)
+				Card tempCard = *it;
+				if(tempCard.suit == whichSuit)
 				{
-					Card tempCard = *it;
-					if(tempCard.suit == whichSuit)
-					{
-						numerator++;
-						break;
-					}
+					retMsg += " \e[1m<-----\e[0m";
+					numerator++;
+					break;
 				}
 			}
+	
 			denominator++;
+			progress_bar.Progressed(i);
+			//theProgress->update();
+
 
 		}
 		else if(whichSuit == -1){
 			for(vector<Card>::iterator it = drawn.begin(); it != drawn.end(); ++it)
 			{
 				Card tempCard = *it;
-				cout << tempCard.name;
 				if(tempCard.value == whichValue)
 				{
+					retMsg += " \e[1m<-----\e[0m";
 					numerator++;
 					break;
 				}
 			}
 			denominator++;
+			progress_bar.Progressed(i);
+			//theProgress->update();
+
 
 		}
 		else{
-			cout << "\n????\n";
+			retMsg += "\n????\n";
 		}
-		cout << "\n";
+		retMsg += "\n";
 	}
 
 
 
 	double chance = (double)numerator/(double)denominator;
 	chance = chance * 100;
-	cout << "\n\nAfter trying " << times << " times, I think the chance is:\n" << chance << "%" << " or " << numerator << "/" << denominator << "\n";
+	if(verbose)
+	{
+		retMsg += "\n\nAfter trying " + to_string(times) + " times, I think the chance is:\n" + to_string(chance) + "%" + " or " + to_string(numerator) + "/" + to_string(denominator) + "\n";
+	}
+	else
+	{
+		retMsg = "\n\nAfter trying " + to_string(times) + " times, I think the chance is:\n" + to_string(chance) + "%" + " or " + to_string(numerator) + "/" + to_string(denominator) + "\n";
+	}
+
+	cout << retMsg;
+
+
 }
 

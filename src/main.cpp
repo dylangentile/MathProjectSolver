@@ -9,17 +9,7 @@
 
 using namespace std;
 
-void problem1(bool logic){
-	Deck *thedeck = new Deck;
-	thedeck->deckInit(); 
-	if(logic){
-	thedeck->dependentProb(2, 1, -1);
-	}
-	else{
-		thedeck->empericalEvidence(1, 1, -1, 10);
-	}
-	delete thedeck;
-}
+
 
 
 string inputter(string out){
@@ -28,6 +18,26 @@ string inputter(string out){
 	getline(cin, input);
 	return input;
 }
+
+void problem1(bool logic, int prescision, bool verbose){
+	Deck *thedeck = new Deck;
+	thedeck->preInit(verbose);
+	thedeck->deckInit(); 
+	if(logic){
+	thedeck->dependentProb(2, 1, -1);
+	}
+	else{
+		thedeck->empericalEvidence(2, 1, -1, prescision);
+	}
+	delete thedeck;
+	cout << "\n";
+	string x = inputter("Again[n/Y]");
+	if(tolower(x[0]) != 'n'){
+		problem1(logic, prescision, verbose);
+	}
+}
+
+
 
 void description(int what){
 	ifstream ifs("../problems");
@@ -102,6 +112,8 @@ int main(int argc, char const *argv[])
 		getline(cin, input);
 		int problemtodo = -1;
 		bool logic = true;
+		bool verbose = false;
+		int prescision = 1000;
 		if(input == "q" || input == "quit" || input == "exit")
 		{
 			break;
@@ -143,12 +155,27 @@ int main(int argc, char const *argv[])
 				if(input[length] >= '0' && input[length] <= '9'){
 					temp.push_back(input[length]);
 				}
-				else if(input[length] == '-' && (input[length+1] == 'd' || input[length+1] == 'l' || input[length+1] == 'e')){
+				else if(input[length] == '-' /*&& (input[length+1] == 'd' || input[length+1] == 'l' || input[length+1] == 'e')*/){
 					if(input[length+1] == 'd'){
 						dodesc = true;
+                        length++;
 					}
 					if(input[length+1] == 'e'){
 						logic = false;
+						string p = "";
+                        while(input[length+2] >= '0' && input[length+2] <= '9'){
+							p.push_back(input[length+2]);
+							length++;
+						}
+						if(!p.empty()){
+							stringstream ss;
+							ss << p;
+							ss >> prescision;
+						}
+                        length++;
+					}
+					if(input[length+1] == 'v'){
+						verbose = true;
 					}
 				}
 				else if(input[length] != ' ')
@@ -171,18 +198,20 @@ int main(int argc, char const *argv[])
 		}
 		
 
-
+		if(verbose){
+			cout << "verbosity";
+		}
 		if(problemtodo >= 1 && problemtodo <= 12){
 			cout << "\n\nDoing " << problemtodo << ":";
 			if(logic){
 				cout << "logically\n";
-				problem1(logic);
+				
 			}
 			else
 			{
 				cout << "emperically\n";
 			}
-			problem1(logic);
+			problem1(logic, prescision, verbose);
 
 		}
 

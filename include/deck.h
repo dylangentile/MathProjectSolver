@@ -16,9 +16,11 @@ public:
 	std::map<char, std::string> nameMap;
 	Deck();
 	~Deck();
+	bool verbose;
 	std::vector<Card> cardArray;
 	int sample;
 	std::string retMsg;
+	void preInit(bool verbosity);
 	void deckInit(); 
 	void dependentProb(int choose, int whichSuit, int whichNumber);
 	void empericalEvidence(int choose, int whichSuit, int whichValue, int times);
