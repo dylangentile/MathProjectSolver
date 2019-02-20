@@ -19,6 +19,24 @@ string inputter(string out){
 	return input;
 }
 
+
+void help(){
+
+
+	cout << "\n\n\n\t------------------------Help------------------------\n";
+	cout << "\t\t------------Solvers------------\n";
+	cout << "\tArg\t|Description\n\n";
+	cout << "\t-e\t  Emperical solver. Solves the problem through experience\n\t\tby choosing, recording, and starting again.\n\t\t --A number can be added after this ('-e10')\n\t\t  to specify repitions. Default(10000).\n\n";
+	cout << "\t-l\t  Logical Solver. Solves the problem by calculating all\n\t\tcombinations and choosing the matching ones.\n\n";
+	cout << "\t\t------------Flags------------\n";
+	cout << "\tArg\t|Description\n\n";
+	cout << "\t-v\t  Verbose. Prints all combinations or draws(-l/-e mode)\n\n";
+	cout << "\t-d\t  Description. Prints the problem description.\n\t\tOverrides all other args.\n\n";
+	inputter(" ");
+
+
+}
+
 void problem1(bool logic, int prescision, bool verbose){
 	Deck *thedeck = new Deck;
 	thedeck->preInit(verbose);
@@ -27,7 +45,7 @@ void problem1(bool logic, int prescision, bool verbose){
 	thedeck->dependentProb(2, 1, -1);
 	}
 	else{
-		thedeck->empericalEvidence(2, 1, -1, prescision);
+		thedeck->empericalEvidence(3, 1, 1, prescision);
 	}
 	delete thedeck;
 	cout << "\n";
@@ -108,15 +126,18 @@ int main(int argc, char const *argv[])
 		cout << "\n\nProbability Problems:\n\n\t1)Cards\t\t2)CardsV2\t3)4_Coins\t4)ColorfulCards\n";
 		cout << "\t5)Students\t6)3_Coins\t7)CardsV3\t8)3_Cards\n";
 		cout << "\t9)Children\t10)4_Cards\t11)Tim&TomDice\t12)MARBLES!\n";
-		cout << "\nEnter the problem number '1' followed by an arg. \n-d:description  -e:emperically  -l:logically\n(INPUT)$";
+		cout << "\nEnter the problem number '1' followed by a solver and then flags. \nType 'help' for more info.\n(INPUT)$";
 		getline(cin, input);
 		int problemtodo = -1;
 		bool logic = true;
 		bool verbose = false;
-		int prescision = 1000;
+		int prescision = 10000;
 		if(input == "q" || input == "quit" || input == "exit")
 		{
 			break;
+		}
+		else if(input == "h" || input == "help"){
+			help();
 		}
 		else if((input.size() == 1 && input[0] >= '1' && input[0] <= '9') || (input.size() == 2 && input[1] == ' '))
 		{
@@ -175,6 +196,7 @@ int main(int argc, char const *argv[])
                         length++;
 					}
 					if(input[length+1] == 'v'){
+                        length++;
 						verbose = true;
 					}
 				}
