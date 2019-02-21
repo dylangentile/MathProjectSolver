@@ -7,7 +7,7 @@ LFLAGS =
 LIBS = 
 #-lmylib -lm
 
-SRCS = main.cpp deck.cpp function.cpp progress_bar.cpp
+SRCS = main.cpp deck.cpp function.cpp progress_bar.cpp generic.cpp
 
 
 

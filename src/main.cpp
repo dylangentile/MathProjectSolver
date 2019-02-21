@@ -6,6 +6,7 @@
 #include <thread>         // std::this_thread::sleep_for
 #include <chrono>         // std::chrono::seconds
 #include "deck.h"
+#include "generic.h"
 
 using namespace std;
 
@@ -37,21 +38,158 @@ void help(){
 
 }
 
-void problem1(bool logic, int prescision, bool verbose){
-	Deck *thedeck = new Deck;
-	thedeck->preInit(verbose);
-	thedeck->deckInit(); 
-	if(logic){
-	thedeck->dependentProb(2, 1, -1);
+void problem5(bool logic, int prescision, bool verbose){
+
+	vector<string> desc;
+	desc.push_back("yurmum");
+
+	GenericObj *theobj = new GenericObj;
+	try {
+		theobj->initObj(verbose);
+		theobj->initContainerArray(2, desc);
+	}catch (const char* msg) {
+     cerr << msg << endl;
+   }
+   vector<string> names;
+	
+
+
+	for(int i = 0; i < 52; i++){
+		names.push_back("genericName" + to_string(i));
 	}
-	else{
-		thedeck->empericalEvidence(3, 1, 1, prescision);
+	for(int i = 0; i < 4; i++){
+		for(int j = 1; j < 14; j++){
+			vector<int> data;
+			data.push_back(i);
+			data.push_back(j);
+			try{
+				theobj->fillContainerArray(data, names.at(1));
+			}
+			catch (const char* msg) {
+   	  			cerr << msg << endl;
+   			}
+		}
 	}
-	delete thedeck;
-	cout << "\n";
-	string x = inputter("Again[n/Y]");
-	if(tolower(x[0]) != 'n'){
-		problem1(logic, prescision, verbose);
+	Container x;
+	x.mName = "hello";
+	x.mInfo.push_back(1);
+	std::vector<int> y;
+	y.push_back(1);
+	//if(theobj->match(x, y))
+	{
+
+	}
+}
+
+
+void problem1(bool logic, int prescision, bool verbose, bool old){
+	if(old){
+		Deck *thedeck = new Deck;
+		thedeck->preInit(verbose);
+		thedeck->deckInit(); 
+		if(logic){
+		thedeck->dependentProb(2, 1, -1);
+		}
+		else{
+			thedeck->empericalEvidence(3, 1, 1, prescision);
+		}
+		delete thedeck;
+		cout << "\n";
+		string x = inputter("Again[n/Y]");
+		if(tolower(x[0]) != 'n'){
+			problem1(logic, prescision, verbose, old);
+		}
+	}
+	else 
+	{
+		vector<string> desc;
+		desc.push_back("Suit");
+		desc.push_back("Number");
+
+		GenericObj *theobj = new GenericObj;
+		try 
+		{
+			theobj->initObj(verbose);
+			theobj->initContainerArray(2, desc);
+		}
+		catch (const char* msg) 
+		{
+     		cerr << msg << endl;
+   		}
+
+   		for(int i = 0; i < 4; i++)
+   		{
+   			for (int j = 1; j < 14; j++)
+   			{
+   				vector<int> data;
+   				string name;
+
+   				data.push_back(i);
+   				data.push_back(j);
+   				if(j == 1)
+				{
+						name = "Ace of ";
+				}
+				else if(j >= 1 && j <= 10){
+					stringstream ss;
+					ss << j;
+					string g;
+					ss >> g;
+					name = g + " of ";
+				}
+				else if(j == 11){
+					name = "Jack of ";
+				}
+				else if(j == 12){
+					name = "Queen of ";
+				}
+				else if(j == 13){
+					name = "King of ";
+				}
+				else {
+					name = "Unknown of ";
+				}
+
+
+				if(i == 0){
+					
+					name += "Spades";
+				}
+				else if(i == 1){
+					name += "Hearts";
+				}
+				else if(i == 2){
+					name += "Clubs";
+				}
+				else if(i == 3){
+					name += "Diamonds";
+				}
+				else {
+					name += "Unknown";
+				}
+				try
+				{
+					theobj->fillContainerArray(data, name);
+				}
+				catch (const char* msg) 
+				{
+     				cerr << msg << endl;
+   				}
+   			}
+   		}
+
+
+   		Container x;
+		x.mName = "hello";
+		x.mInfo.push_back(1);
+		std::vector<int> y;
+		y.push_back(1);
+		//if(theobj->match(x, y))
+		{
+
+		}
+
+		delete theobj;
 	}
 }
 
@@ -131,6 +269,7 @@ int main(int argc, char const *argv[])
 		int problemtodo = -1;
 		bool logic = true;
 		bool verbose = false;
+		bool old = false;
 		int prescision = 10000;
 		if(input == "q" || input == "quit" || input == "exit")
 		{
@@ -199,6 +338,10 @@ int main(int argc, char const *argv[])
                         length++;
 						verbose = true;
 					}
+					if(input[length+1] == 'o'){
+						old = true;
+						length++;
+					}
 				}
 				else if(input[length] != ' ')
 				{
@@ -233,8 +376,16 @@ int main(int argc, char const *argv[])
 			{
 				cout << "emperically\n";
 			}
-			problem1(logic, prescision, verbose);
 
+			if(problemtodo == 5){
+				problem5(logic, prescision, verbose);
+			}
+			else 
+			{
+
+			problem1(logic, prescision, verbose, old);
+			
+			}
 		}
 
 
