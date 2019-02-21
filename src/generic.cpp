@@ -336,7 +336,10 @@ GenericObj::dependentLogical(int choose, vector<vector<int> > what, bool order, 
 	}
 }
 
+void
+GenericObj::drawIt(vector<int> incrementors, int nesting){
 
+}
 
 int
 GenericObj::independentLogical(int choose, vector<vector<int> > what, bool order, bool exactly, bool progress){
@@ -357,10 +360,18 @@ GenericObj::independentLogical(int choose, vector<vector<int> > what, bool order
 			{
 				int theMatches = 0;
 				int theTries = ContainerArray.size();
-
-				vector<Container> mod;
+				
+				vector<int> incrementors;vector<Container> mod;
+				for(int q = 0; q < choose-1; q++){
+					incrementors.push_back(0);
+				}
 				for(int i = 0; i < theTries; i++){
 					mod.push_back(ContainerArray.back());
+					vector<Container> chooseInc = ContainerArray;
+					drawIt(chooseInc);
+
+
+
 										
 				}
 
