@@ -336,8 +336,19 @@ GenericObj::dependentLogical(int choose, vector<vector<int> > what, bool order, 
 	}
 }
 
+
+
 int
 GenericObj::independentLogical(int choose, vector<vector<int> > what, bool order, bool exactly, bool progress){
+	
+	vector<vector<int> > tempVect;
+	for(vector<vector<int> >::reverse_iterator it = tempVect.rbegin(); it != tempVect.rend(); ++it){
+		tempVect.push_back(*it);
+	}
+	
+	if(what.size() != choose){
+		throw "For logical solves the what vector must match the choose int";
+	}
 	if(done)
 	{
 		if(order)
@@ -346,6 +357,13 @@ GenericObj::independentLogical(int choose, vector<vector<int> > what, bool order
 			{
 				int theMatches = 0;
 				int theTries = ContainerArray.size();
+
+				vector<Container> mod;
+				for(int i = 0; i < theTries; i++){
+					mod.push_back(ContainerArray.back());
+										
+				}
+
 				
 			}
 		}

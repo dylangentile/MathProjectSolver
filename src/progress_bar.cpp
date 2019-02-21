@@ -35,15 +35,15 @@ int ProgressBar::GetConsoleWidth(){
 
     int width;
 
-	#ifdef _WINDOWS
+	//#ifdef _WINDOWS
 		CONSOLE_SCREEN_BUFFER_INFO csbi;
 		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
 		width = csbi.srWindow.Right - csbi.srWindow.Left;
-	#else
-		struct winsize win;
-		ioctl(0, TIOCGWINSZ, &win);
-        width = win.ws_col;
-	#endif
+	//#else
+	//	struct winsize win;
+	//	ioctl(0, TIOCGWINSZ, &win);
+   //     width = win.ws_col;
+	//#endif
 
     return width;
 }

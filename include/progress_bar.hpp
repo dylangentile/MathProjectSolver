@@ -2,11 +2,11 @@
 #ifndef _PROGRESS_BAR_
 #define _PROGRESS_BAR_
 
-#ifdef _WINDOWS
+//#ifdef _WINDOWS_
 #include <windows.h>
-#else
-#include <sys/ioctl.h>
-#endif
+//#else
+//#include <sys/ioctl.h>
+//#endif
 
 #include <iostream>
 #include <iomanip>

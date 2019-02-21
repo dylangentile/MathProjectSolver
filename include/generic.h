@@ -25,6 +25,7 @@ public:
 	int independentLogical(int choose, std::vector<std::vector<int> > what, bool order, bool exactly, bool progress = false);
 private:
 	bool match(Container against, std::vector<int> with);
+	Container drawMe();
 	std::string retMsg;
 	bool verbose;
 	std::vector<Container> ContainerArray;
