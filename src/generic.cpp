@@ -1,6 +1,9 @@
 #include "generic.h"
-#include <iostream>
 #include "progress_bar.hpp"
+
+#include <iostream>
+#include <random>
+#include <algorithm>
 
 
 using namespace std;
@@ -51,6 +54,12 @@ GenericObj::fillContainerArray(vector<int> info, string name){
 	}
 }
 
+void
+GenericObj::finished(){
+	done = true;
+	ContainerArrayCopy = ContainerArray;
+}
+
 
 bool
 GenericObj::match(Container against, vector<int> with){
@@ -99,30 +108,253 @@ GenericObj::match(Container against, vector<int> with){
 
 
 int
-GenericObj::dependentEmperical(int choose, vector<int> what, bool order, bool exactly, bool progress, int times){
-
-}
-
-int
-GenericObj::independentEmperical(int choose, vector<int> what, bool order, bool exactly, bool progress, int times){
-	if(!order)
-	{
-		if(!exactly)
-		{
-
-		}
+GenericObj::dependentEmperical(int choose, vector<vector<int> > what, bool order, bool exactly, bool progress, int times){
+	if(what.size() > choose){
+		throw "You are saying you want to choose more cards than you have.";
+		return -1;
 	}
 
+
+	if(done)
+	{
+		
+
+		ProgressBar theprogress(times, "Calculating");
+		
+		if(!order)
+		{
+			if(!exactly) //not 1 or more, but instead only once, etc
+			{
+
+				int theMatches = 0;
+				int theTries = 0;
+
+				for(int i = 0; i < times; i++)
+				{
+					if(progress)
+					{
+						theprogress.Progressed(i);
+					}
+					vector<Container> taken;
+					ContainerArray = ContainerArrayCopy;
+					random_shuffle(ContainerArray.begin(), ContainerArray.end());
+					for(int q = 0; q < choose; q++)
+					{
+						taken.push_back(ContainerArray.back());
+						retMsg += taken.back().mName;
+						if(taken.back().mName.size() >= 16)
+						{
+							retMsg += "\t";
+						}
+						else{
+							retMsg += "\t\t";
+						}
+						ContainerArray.pop_back();
+					}
+					int matchings = 0;
+					vector<vector<int> > modWhat = what;
+					vector<vector<int> > used;
+					for(vector<Container>::iterator qi = taken.begin(); qi != taken.end(); ++qi)
+					{
+						
+						for(vector<vector<int> >::iterator theit = modWhat.begin(); theit != modWhat.end(); ++theit)
+						{
+						if(match(*qi, *theit))
+							{
+								used.push_back(*theit);
+								modWhat.erase(theit);
+								matchings++;
+								break;
+							}
+
+						}
+					}
+					if(matchings == what.size()){
+						theMatches++;
+						retMsg+= " <------";
+					}
+					theTries++;
+					retMsg+="\n";
+				}
+				if(verbose){
+					cout << "\n\n" << retMsg;
+				}
+				return theMatches;
+
+
+			}
+			else
+			{
+
+				int theMatches = 0;
+				int theTries = 0;
+
+				for(int i = 0; i < times; i++)
+				{
+					if(progress)
+					{
+						theprogress.Progressed(i);
+					}
+					vector<Container> taken;
+					ContainerArray = ContainerArrayCopy;
+					random_shuffle(ContainerArray.begin(), ContainerArray.end());
+					for(int q = 0; q < choose; q++)
+					{
+						taken.push_back(ContainerArray.back());
+						retMsg += taken.back().mName;
+						if(taken.back().mName.size() >= 16)
+						{
+							retMsg += "\t";
+						}
+						else{
+							retMsg += "\t\t";
+						}
+						ContainerArray.pop_back();
+					}
+					int matchings = 0;
+					vector<vector<int> > modWhat = what;
+					for(vector<Container>::iterator qi = taken.begin(); qi != taken.end(); ++qi)
+					{
+						
+						for(vector<vector<int> >::iterator theit = modWhat.begin(); theit != modWhat.end(); ++theit)
+						{
+						if(match(*qi, *theit))
+							{
+								modWhat.erase(theit);
+								matchings++;
+								break;
+							}
+
+						}
+					}
+					if(matchings == what.size()){
+						theMatches++;
+						retMsg+= " <------";
+					}
+					theTries++;
+					retMsg+="\n";
+				}
+				if(verbose){
+					cout << "\n\n" << retMsg;
+				}
+				return theMatches;
+			}
+		}
+		else
+		{
+			int theMatches = 0;
+			int theTries = 0;
+			for(int i = 0; i < times; i++){
+				if(progress)
+				{
+					theprogress.Progressed(i);
+				}
+				vector<Container> taken;
+				ContainerArray = ContainerArrayCopy;
+				
+				random_shuffle(ContainerArray.begin(), ContainerArray.end());
+				for(int q = 0; q < choose; q++)
+				{
+					taken.push_back(ContainerArray.back());
+					retMsg += taken.back().mName;
+					if(taken.back().mName.size() >= 16)
+					{
+						retMsg += "\t";
+					}
+					else{
+						retMsg += "\t\t";
+					}
+					ContainerArray.pop_back();
+				}
+				int matchings = 0;
+				int z = 0;
+				for(vector<Container>::iterator qi = taken.begin(); qi != taken.end(); ++qi)
+				{
+					
+					if(z < what.size()){
+						if(match(*qi, what.at(z)))
+						{
+							matchings++;
+						}
+					} else {
+						break;
+					}
+
+
+					z++;
+				}
+				if(matchings == what.size()){
+					theMatches++;
+					retMsg+= " <------";
+				}
+				theTries++;
+				retMsg+="\n";
+			}
+			if(verbose)
+			{
+					cout << "\n\n" << retMsg;
+			}
+			return theMatches;
+		}
+	} 
+	else 
+	{
+		throw "You didn't call 'void GenericObj::finished()' yet, so you cannot do any solutions.";
+		return -1;
+	}
+
+
+
+	return -1;
+
 }
 
 int
-GenericObj::dependentLogical(int choose, vector<int> what, bool order, bool exactly, bool progress){
+GenericObj::independentEmperical(int choose, vector<vector<int> > what, bool order, bool exactly, bool progress, int times){
+	if(done)
+	{
+
+	}
+	else
+	{
+		throw "You didn't call 'void GenericObj::finished()' yet, so you cannot do any solutions.";
+		return -1;
+	}	
 
 }
 
 int
-GenericObj::independentLogical(int choose, vector<int> what, bool order, bool exactly, bool progress){
+GenericObj::dependentLogical(int choose, vector<vector<int> > what, bool order, bool exactly, bool progress){
+	if(done)
+	{
 
+	}
+	else
+	{
+		throw "You didn't call 'void GenericObj::finished()' yet, so you cannot do any solutions.";
+		return -1;
+	}
+}
+
+int
+GenericObj::independentLogical(int choose, vector<vector<int> > what, bool order, bool exactly, bool progress){
+	if(done)
+	{
+		if(order)
+		{
+			if(exactly)
+			{
+				int theMatches = 0;
+				int theTries = ContainerArray.size();
+				
+			}
+		}
+	}
+	else
+	{
+		throw "You didn't call 'void GenericObj::finished()' yet, so you cannot do any solutions.";
+		return -1;
+	}
 }
 
 

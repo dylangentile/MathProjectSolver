@@ -33,6 +33,21 @@ void help(){
 	cout << "\tArg\t|Description\n\n";
 	cout << "\t-v\t  Verbose. Prints all combinations or draws(-l/-e mode)\n\n";
 	cout << "\t-d\t  Description. Prints the problem description.\n\t\tOverrides all other args.\n\n";
+	cout << "\t-o\t  Old method. Will get the solution through a \n\t\tnon-(Generic Probability Libary) solver. [deprecated]\n\n";
+
+
+	cout << "\t\t------------Commands-----------\n";
+	cout << "\tCommand\t|Description\n\n";
+	cout << "   quit/q/exit    Exits the program\n\n";
+	cout << "\th/help\t  Conjures the help menu\n\n";
+	cout << "\t  info\t  Prints program info.\n\n";
+	cout << "      editor/E\t  Opens the Generic Probability Libary problem editor.\n\n";
+
+
+
+
+
+
 	inputter(" ");
 
 
@@ -178,18 +193,30 @@ void problem1(bool logic, int prescision, bool verbose, bool old){
    			}
    		}
 
-
-   		Container x;
-		x.mName = "hello";
-		x.mInfo.push_back(1);
-		std::vector<int> y;
-		y.push_back(1);
-		//if(theobj->match(x, y))
-		{
-
-		}
-
+   		theobj->finished();
+   		vector<vector<int> > want;
+   		vector<int> tv, tv2;
+   		tv.push_back(1);
+   		tv.push_back(-1);
+   		want.push_back(tv);
+   		tv2.push_back(-1);
+   		tv2.push_back(1);
+   		//want.push_back(tv2);
+   		int ret = -2;
+   		try{
+   			ret = theobj->dependentEmperical(2, want, false, true, true, prescision);
+		}catch (const char* msg) {cerr << msg << endl;}
 		delete theobj;
+		if(ret == -1){
+			cout << "\ndependentEmperical Returned -1\n";
+		}
+		else if(ret != -2){
+			cout << "\n\nAfter trying " << prescision << " times, I think the chance is:\n" << (double)(ret * 100)/(double)prescision << "%" << " or " << ret << "/" << prescision << "\n";
+		}
+		string x = inputter("Again[n/Y]");
+		if(tolower(x[0]) != 'n'){
+			problem1(logic, prescision, verbose, old);
+		}
 	}
 }
 

@@ -108,7 +108,7 @@ Deck::dependentProb(int choose, int whichSuit, int whichValue){
 */
 	choose--;
 	int numerator;
-	long long denominator = factorial(sample, sample - choose);
+	//long long denominator = factorial(sample, sample - choose);
 
     
 
